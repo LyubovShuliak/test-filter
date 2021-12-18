@@ -1,0 +1,14 @@
+.collection {
+  display: flex;
+  flex-direction: row;
+}
+.catalog {
+  display: grid;
+  max-width: 960px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+}
+.filters {
+  display: flex;
+  flex-direction: column;
+}
