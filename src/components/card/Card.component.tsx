@@ -11,77 +11,94 @@ import { Link, useParams } from "react-router-dom";
 import "./Card.component.scss";
 import createTheme from "@mui/material/styles/createTheme";
 import { ThemeProvider } from "@emotion/react";
+
 interface StandardComponentProps {
   image: string;
   title: string;
   price: string;
   description: string;
+  key: number;
 }
+
 const theme = createTheme({
   components: {
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          "&:hover>MuiCardMedia": { width: "600px" },
-        },
-      },
-    },
     MuiCardMedia: {
       styleOverrides: {
         root: {
+          transition: "transform .3s ease-in-out",
           "&:hover": {
-       
             cursor: "pointer",
-            transform: "translateY(80px) scale(1.5)",
-            position: "absolute",
-            zIndex:"100",
-            transition: "transform .3s ease-out",
           },
         },
         img: {
+          clickEvents: "none",
           maxWidth: "220px",
           objectFit: "scale-down",
+          margin: "auto",
+          padding: "20px",
         },
       },
     },
   },
 });
+
 export default function MediaCard({
   image,
   title,
   price,
+  key,
 }: StandardComponentProps) {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <Card sx={{ height: 500 }}>
-          <CardMedia
-            component="img"
-            height="140"
-            image={`${image}`}
-            alt={`${title}`}
-            sx={{ height: 150 }}
-          />
+        <Card
+          sx={{
+            height: 500,
+            display: "flex",
+            width: 400,
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <CardMedia
+              id={String(key)}
+              component="img"
+              height="140"
+              image={`${image}`}
+              alt={`${title}`}
+              sx={{ height: 150 }}
+            />
 
-          <CardContent sx={{ maxWidth: 300, height: 220 }}>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              sx={{ height: 200 }}
+            <CardContent
+              sx={{
+                display: "flex",
+                justifyItems: "end",
+                flexDirection: "column",
+              }}
             >
-              {title}
-            </Typography>
+              <Typography
+                sx={{ justifySelf: "flex-end", fontSize: "20px" }}
+                gutterBottom
+                variant="h5"
+                component="div"
+              >
+                {title}
+              </Typography>
+            </CardContent>
+          </div>
+
+          <div>
             <Typography variant="body2">
               <Button variant="text" color="error">
                 {" "}
                 {price} $
               </Button>
             </Typography>
-          </CardContent>
-          <CardActions>
-            <Button variant="contained">Add to cart</Button>
-          </CardActions>
+            <CardActions>
+              <Button variant="contained">Add to cart</Button>
+            </CardActions>
+          </div>
         </Card>
       </ThemeProvider>
     </div>

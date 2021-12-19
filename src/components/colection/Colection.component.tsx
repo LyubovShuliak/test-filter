@@ -16,6 +16,7 @@ interface QuotationProps {
   };
   title: string;
   description: string;
+  clicked:boolean
 }
 
 const Collection = () => {
@@ -25,7 +26,7 @@ const Collection = () => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
       .then((json) => {
-        const catalog = json;
+        const catalog = json.map((el: any) => ({ ...el, clicked: false }));
         setProducts(json);
         setfiltredProducts(json);
       });
@@ -60,6 +61,7 @@ const Collection = () => {
               image={el.image}
               description={el.description}
               title={el.title}
+              
             />
           );
         })}
