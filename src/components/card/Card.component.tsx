@@ -24,19 +24,29 @@ const theme = createTheme({
   components: {
     MuiCardMedia: {
       styleOverrides: {
-        root: {
-          transition: "transform .3s ease-in-out",
-          "&:hover": {
-            cursor: "pointer",
-          },
-        },
         img: {
-          clickEvents: "none",
           maxWidth: "220px",
           objectFit: "scale-down",
           margin: "auto",
           padding: "20px",
         },
+      },
+    },
+    MuiCardActions: {
+      styleOverrides: {
+        root: {
+          padding: "16px 16px",
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          paddingLeft: "8px",
+        },
+        button:{
+          paddingLeft: "16px",
+        }
       },
     },
   },
@@ -89,8 +99,8 @@ export default function MediaCard({
           </div>
 
           <div>
-            <Typography variant="body2">
-              <Button variant="text" color="error">
+            <Typography variant="body2"   >
+              <Button variant="text" color="error" >
                 {" "}
                 {price} $
               </Button>
