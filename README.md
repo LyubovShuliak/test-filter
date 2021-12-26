@@ -19,7 +19,7 @@ You will also see any lint errors in the console.
 ### `npm run build`
 
 Builds the app for production to the `dist` folder.\
-It `webpack --mode production`.
+It runs `webpack --mode production`.
 
 
 
