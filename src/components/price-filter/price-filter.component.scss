@@ -1,0 +1,13 @@
+.price_filter {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+ width: 200px;
+  div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+  }
+  
+}

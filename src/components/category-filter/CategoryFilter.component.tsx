@@ -7,6 +7,14 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
+// import {
+//   selectByCategory,
+//   filterByCategory,
+// } from "../../redux/filter/filtersSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { QuotationProps } from "../../pages/colection/Colection.component";
+import { filterBy, filterBySelector } from "../../redux/shop/shopSlice";
+import { useSelector } from "react-redux";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -19,47 +27,50 @@ const MenuProps = {
   },
 };
 
- interface QuotationProps {
-  filtredProducts: any;
-  setfiltredProducts: any;
-  products: any;
-}
-const names = ["men's clothing", "jewelery", "electronics", "women's clothing"];
+export const names = [
+  "men's clothing",
+  "jewelery",
+  "electronics",
+  "women's clothing",
+];
 
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
-export default function CategoryFilter({
-  setfiltredProducts,
-  products,
-}: QuotationProps) {
+const CategoryFilter = () => {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const filteredByCategories = useSelector(filterBySelector);
+  const dispatch = useAppDispatch();
+  const handleChange = (event: any) => {
     const {
       target: { value },
     } = event;
     let selectedCategories =
       typeof value === "string" ? value.split(",") : value;
-    setPersonName(
-      // On autofill we get a the stringified value.
-      selectedCategories
+
+      console.log("selectedCategories: ", selectedCategories);
+      
+    dispatch(
+      filterBy({
+        byRating: filteredByCategories.byRating,
+        byCategory: selectedCategories,
+      })
     );
-    if (!selectedCategories.length) {
-      setfiltredProducts(products);
-      return;
-    }
-    setfiltredProducts(
-      products.filter((e: any) => selectedCategories.includes(e.category))
-    );
+    // // dispatch(fetchProducts()).then((response) => {
+    // //   let dsd= response.payload
+    // //   if (response.meta.requestStatus === "fulfilled") {
+    // //     if (dsd.length >= products.length) {
+    // //       dispatch(filterByCategory(selectedCategories));
+    // //     }
+    // //   }
+    // // });
   };
+  function getStyles(name: string, filter: readonly string[], theme: Theme) {
+    return {
+      fontWeight:
+        filter.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
 
   return (
     <div>
@@ -69,7 +80,7 @@ export default function CategoryFilter({
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
-          value={personName}
+          value={filteredByCategories.byCategory}
           onChange={handleChange}
           input={
             <OutlinedInput
@@ -93,7 +104,7 @@ export default function CategoryFilter({
             <MenuItem
               key={name}
               value={name}
-              style={getStyles(name, personName, theme)}
+              style={getStyles(name, filteredByCategories.byCategory, theme)}
             >
               {name}
             </MenuItem>
@@ -102,4 +113,5 @@ export default function CategoryFilter({
       </FormControl>
     </div>
   );
-}
+};
+export default CategoryFilter;

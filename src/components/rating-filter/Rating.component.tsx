@@ -3,16 +3,17 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 
-interface QuotationProps {
-  filtredProducts: any;
-  setfiltredProducts: any;
+import { filter, filterBy, filterBySelector } from "../../redux/shop/shopSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+export interface QuotationProps {
+  filteredProducts: any;
+  setFilteredProducts: any;
   products: any;
+  range: any;
 }
-export default function Ratings({
-  setfiltredProducts,
-  products,
-}: QuotationProps) {
-  const [value, setValue] = React.useState<number | null>(1);
+const Ratings = () => {
+  const filterSelector = useAppSelector(filterBySelector);
+  const dispatch = useAppDispatch();
 
   return (
     <Box
@@ -20,20 +21,21 @@ export default function Ratings({
         "& > legend": { mt: 1 },
       }}
     >
-      <Typography component="legend">Filter by rating</Typography>
+      <Typography component="legend">Rating more than</Typography>
+
       <Rating
         name="simple-controlled"
-        value={value}
+        value={filterSelector.byRating}
         onChange={(event, newValue) => {
-          console.log(newValue);
-          setValue(newValue);
-          setfiltredProducts(
-            products.filter(
-              (el: any) => newValue !== null && el.rating.rate < newValue
-            )
+          dispatch(
+            filterBy({
+              byRating: newValue,
+              byCategory: filterSelector.byCategory,
+            })
           );
         }}
       />
     </Box>
   );
-}
+};
+export default Ratings;

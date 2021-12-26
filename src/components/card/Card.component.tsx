@@ -17,7 +17,6 @@ interface StandardComponentProps {
   title: string;
   price: string;
   description: string;
-  key: number;
 }
 
 const theme = createTheme({
@@ -44,9 +43,9 @@ const theme = createTheme({
         root: {
           paddingLeft: "8px",
         },
-        button:{
+        button: {
           paddingLeft: "16px",
-        }
+        },
       },
     },
   },
@@ -56,10 +55,9 @@ export default function MediaCard({
   image,
   title,
   price,
-  key,
 }: StandardComponentProps) {
   return (
-    <div>
+    <>
       <ThemeProvider theme={theme}>
         <Card
           sx={{
@@ -72,7 +70,6 @@ export default function MediaCard({
         >
           <div>
             <CardMedia
-              id={String(key)}
               component="img"
               height="140"
               image={`${image}`}
@@ -99,8 +96,8 @@ export default function MediaCard({
           </div>
 
           <div>
-            <Typography variant="body2"   >
-              <Button variant="text" color="error" >
+            <Typography variant="body2">
+              <Button variant="text" color="error">
                 {" "}
                 {price} $
               </Button>
@@ -111,6 +108,6 @@ export default function MediaCard({
           </div>
         </Card>
       </ThemeProvider>
-    </div>
+    </>
   );
 }

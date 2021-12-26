@@ -1,14 +1,19 @@
 .collection {
   display: flex;
   flex-direction: row;
+  margin: 30px 40px;
 }
 .catalog {
   display: grid;
   max-width: 960px;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 30px;
+  margin-top: 80px;
+  
 }
 .filters {
   display: flex;
   flex-direction: column;
+  gap: 30px;
 }
+

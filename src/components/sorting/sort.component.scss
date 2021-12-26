@@ -1,0 +1,13 @@
+.sort {
+  position: fixed;
+  // height: 60px;
+  right: 150px;
+  top: 20px;
+ 
+  display: flex;
+  flex-direction: row;
+  p {
+    font-size: 1.5rem;
+    padding: 0;
+  }
+}

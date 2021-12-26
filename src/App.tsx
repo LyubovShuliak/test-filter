@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+
 import "./App.css";
-import Collection from "./components/colection/Colection.component";
+import Collection from "./pages/colection/Colection.component";
 
 const App = () => {
   return <Collection />;
