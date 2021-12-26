@@ -13,6 +13,7 @@ import {
   loading,
   filteredProducts,
 } from "../../redux/shop/shopSlice";
+import PriceFilter from "../../components/price-filter/PriceFilter.component";
 
 export interface QuotationProps {
   id: number;
@@ -44,6 +45,7 @@ const CollectionComponent = () => {
       <div className="filters">
         <CategoryFilter />
         <Ratings />
+        <PriceFilter  />
       </div>
 
       {isLoading ? (

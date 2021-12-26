@@ -26,6 +26,7 @@ interface ProductsState {
 interface Filters {
   byRating: number;
   byCategory: Array<string>;
+  byPrice: number[];
 }
 
 const initialState: ProductsState = {
@@ -35,6 +36,7 @@ const initialState: ProductsState = {
   filterBy: {
     byRating: 0,
     byCategory: [],
+    byPrice: [],
   },
 };
 
@@ -59,18 +61,6 @@ export const productsSlice = createSlice({
         return 0;
       });
     },
-    filter: (state, action) => {
-      console.log("action ", action.payload);
-
-      const categories = action.payload.byCategory.length
-        ? action.payload.filters.byCategory
-        : names;
-      const ratings = action.payload.byRating;
-
-      state.filteredProducts = state.products.filter((el: any) => {
-        return el.rating.rate >= ratings && categories.includes(el.category);
-      });
-    },
 
     filterBy: (state, action) => {
       state.filterBy.byRating = action.payload.byRating;
@@ -80,9 +70,14 @@ export const productsSlice = createSlice({
         ? action.payload.byCategory
         : names;
       const ratings = action.payload.byRating;
-
-      state.filteredProducts = state.products.filter((el: any) => {
-        return el.rating.rate >= ratings && categories.includes(el.category);
+      const range = action.payload.byPrice;
+      state.filteredProducts = state.products.filter((el: QuotationProps) => {
+        return (
+          el.rating.rate >= ratings &&
+          categories.includes(el.category) &&
+          el.price >= range[0] &&
+          el.price <= range[1]
+        );
       });
     },
   },
@@ -91,6 +86,11 @@ export const productsSlice = createSlice({
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
       state.products = action.payload;
       state.filteredProducts = action.payload;
+      const pricesRange = action.payload.map((e) => e.price);
+      state.filterBy.byPrice = [
+        Math.min(...pricesRange),
+        Math.max(...pricesRange),
+      ];
       state.isLoading = false;
     });
     builder.addCase(fetchProducts.pending, (state) => {
@@ -99,10 +99,11 @@ export const productsSlice = createSlice({
   },
 });
 
-export const { setSortProducts, filter, filterBy } = productsSlice.actions;
+export const { setSortProducts, filterBy } = productsSlice.actions;
 export const selectProducts = (state: RootState) => state.products.products;
 export const filteredProducts = (state: RootState) =>
   state.products.filteredProducts;
 export const loading = (state: RootState) => state.products.isLoading;
 export const filterBySelector = (state: RootState) => state.products.filterBy;
+
 export default productsSlice.reducer;

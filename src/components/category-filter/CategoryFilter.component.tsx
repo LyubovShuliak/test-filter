@@ -5,14 +5,11 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-// import {
-//   selectByCategory,
-//   filterByCategory,
-// } from "../../redux/filter/filtersSlice";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { QuotationProps } from "../../pages/colection/Colection.component";
+
+import { useAppDispatch } from "../../app/hooks";
+
 import { filterBy, filterBySelector } from "../../redux/shop/shopSlice";
 import { useSelector } from "react-redux";
 
@@ -46,22 +43,13 @@ const CategoryFilter = () => {
     let selectedCategories =
       typeof value === "string" ? value.split(",") : value;
 
-      console.log("selectedCategories: ", selectedCategories);
-      
     dispatch(
       filterBy({
+        byPrice: filteredByCategories.byPrice,
         byRating: filteredByCategories.byRating,
         byCategory: selectedCategories,
       })
     );
-    // // dispatch(fetchProducts()).then((response) => {
-    // //   let dsd= response.payload
-    // //   if (response.meta.requestStatus === "fulfilled") {
-    // //     if (dsd.length >= products.length) {
-    // //       dispatch(filterByCategory(selectedCategories));
-    // //     }
-    // //   }
-    // // });
   };
   function getStyles(name: string, filter: readonly string[], theme: Theme) {
     return {
@@ -105,6 +93,13 @@ const CategoryFilter = () => {
               key={name}
               value={name}
               style={getStyles(name, filteredByCategories.byCategory, theme)}
+              sx={[
+                {
+                  "&.active": {
+                    color: "red",
+                  },
+                },
+              ]}
             >
               {name}
             </MenuItem>

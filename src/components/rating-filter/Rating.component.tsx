@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 
-import { filter, filterBy, filterBySelector } from "../../redux/shop/shopSlice";
+import {  filterBy, filterBySelector } from "../../redux/shop/shopSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 export interface QuotationProps {
   filteredProducts: any;
@@ -21,7 +21,7 @@ const Ratings = () => {
         "& > legend": { mt: 1 },
       }}
     >
-      <Typography component="legend">Rating more than</Typography>
+      <Typography component="legend" className="filter_name">Rating</Typography>
 
       <Rating
         name="simple-controlled"
@@ -29,6 +29,7 @@ const Ratings = () => {
         onChange={(event, newValue) => {
           dispatch(
             filterBy({
+              byPrice:filterSelector.byPrice,
               byRating: newValue,
               byCategory: filterSelector.byCategory,
             })

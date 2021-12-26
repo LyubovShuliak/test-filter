@@ -1,69 +1,89 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-import { QuotationProps } from "../rating-filter/Rating.component";
+
 import "./price-filter.component.scss";
-function valuetext(value: number) {
-  return `${value * 10}`;
+
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+
+import { filterBy, filterBySelector } from "../../redux/shop/shopSlice";
+
+function valuetext(value: number, rangeValue: number) {
+  const price = (value * rangeValue) / 100;
+  return price.toFixed();
 }
 
-export default function PriceFilter({
-  setFilteredProducts,
-  products,
-  filteredProducts,
-  range,
-}: QuotationProps) {
-  const [value, setValue] = React.useState<number[]>([0, 100]);
+export default function PriceFilter() {
+  const selectValue = useAppSelector(filterBySelector);
+  const dispatch = useAppDispatch();
+  const [value, setValue] = React.useState<number[]>([0, 1000]);
   const [priceFiltered, setPriceFiltered] = React.useState<any[]>([]);
   const handleChange = (event: Event, newValue: number | number[]) => {
-    const maxVal = +value[1] * (range[1] / 100);
-
     setValue(newValue as number[]);
-    let newFiltered;
-    newFiltered = filteredProducts.filter((el: any) => {
-      if (el.price <= maxVal) return true;
-      return false;
-    });
-
-    console.log("newFiltered: ", newFiltered);
-    
-    // if (priceFiltered.length > filteredProducts.length) {
-    //   newFiltered = priceFiltered.filter(
-    //     (el: any) =>
-    //       el.price >= +value[0] * (range[1] / 100) &&
-    //       el.price <= +value[1] * (range[1] / 100)
-    //   );
-    //   //   console.log(priceFiltered);
-    // } else {
-    //   console.log("priceFiltered: ", priceFiltered);
-    //   console.log("filteredProducts: ", filteredProducts);
-
-    //   newFiltered = filteredProducts.filter(
-    //     (el: any) =>
-    //       el.price >= +value[0] * (range[1] / 100) &&
-    //       el.price <= +value[1] * (range[1] / 100)
-    //   );
-    // }
-
-    setFilteredProducts(newFiltered);
+    if (value[0] < value[1]) {
+      dispatch(
+        filterBy({
+          byPrice: value,
+          byRating: selectValue.byRating,
+          byCategory: selectValue.byCategory,
+        })
+      );
+    }
   };
-  useEffect(() => {
-    setPriceFiltered(filteredProducts);
-  });
 
   return (
     <div className="price_filter">
-      <div>
+      <p className="filter_name">Price</p>
+      <div className="price_inputs">
         {" "}
-        <p>{+value[0] * (range[1] / 100)}$</p>
-        <p>{+value[1] * (range[1] / 100)}$</p>
+        <input
+          type="text"
+          className="max-price"
+          value={String(value[0])}
+          onChange={(e) => {
+            if (+e.target.value > value[1]) {
+              e.target.classList.add("not_valid");
+            } else {
+              e.target.classList.remove("not_valid");
+              dispatch(
+                filterBy({
+                  byPrice: [+e.target.value, selectValue.byPrice[1]],
+                  byRating: selectValue.byRating,
+                  byCategory: selectValue.byCategory,
+                })
+              );
+            }
+            setValue([+e.target.value, value[1]]);
+          }}
+        />
+        <input
+          type="text"
+          className="max-price"
+          value={String(value[1])}
+          onChange={(e) => {
+            if (+e.target.value < value[0]) {
+              e.target.classList.add("not_valid");
+            } else {
+              e.target.classList.remove("not_valid");
+              dispatch(
+                filterBy({
+                  byPrice: [selectValue.byPrice[0], +e.target.value],
+                  byRating: selectValue.byRating,
+                  byCategory: selectValue.byCategory,
+                })
+              );
+            }
+            setValue([value[0], +e.target.value]);
+          }}
+        />
       </div>
-
-      <Box sx={{ width: 200 }}>
+      <Box sx={{ width: 170, margin: "auto" }}>
         <Slider
-          getAriaLabel={() => "Temperature range"}
+          getAriaLabel={() => "Price-range"}
           value={value}
           onChange={handleChange}
+          min={0}
+          max={1000}
         />
       </Box>
     </div>

@@ -14,9 +14,11 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import "./sort.component.scss";
 const SortComponent = () => {
   const dispatch = useAppDispatch();
+  const [sortCriteria, setSortCriteria] = useState<string>("3");
 
   const handleChange = (event: SelectChangeEvent) => {
     dispatch(setSortProducts(event.target.value));
+    setSortCriteria(event.target.value);
   };
 
   return (
@@ -25,15 +27,15 @@ const SortComponent = () => {
         sx={{ m: 0, width: 300, backgroundColor: "white", height: 56 }}
       >
         <Select
-          value={"3"}
+          value={sortCriteria}
           onChange={handleChange}
           displayEmpty
           inputProps={{ "aria-label": "Without label" }}
         >
-          <MenuItem value={1}> Price from high to low</MenuItem>
-          <MenuItem value={2}>Price from low to high</MenuItem>
-          <MenuItem value={3}>Ratings </MenuItem>
-          <MenuItem value={4}>Popularity</MenuItem>
+          <MenuItem value={"1"}>Price from high to low</MenuItem>
+          <MenuItem value={"2"}>Price from low to high</MenuItem>
+          <MenuItem value={"3"}>Ratings </MenuItem>
+          <MenuItem value={"4"}>Popularity</MenuItem>
         </Select>
       </FormControl>
     </div>
